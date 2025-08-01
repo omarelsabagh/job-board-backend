@@ -18,12 +18,32 @@ enum UserRole {
   JOBSEEKER
 }
 
+enum JobStatus {
+  OPEN
+  CLOSED
+}
+
 model User {
   id        Int       @id @default(autoincrement())
   role      UserRole
   fullname  String
-  email     String @unique
+  email     String    @unique
   password  String
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+
+  jobs Job[]
+}
+
+model Job {
+  id            String    @id @default(uuid())
+  title         String
+  description   String
+  location      String
+  salary        Int
+  status        JobStatus @default(OPEN)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime?  @updatedAt
+  createdById   Int
+  createdByUser User      @relation(fields: [createdById], references: [id])
 }
