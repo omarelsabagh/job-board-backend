@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: job-board-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-jobboard}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-jobboard}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - job-board-network
+
+  app:
+    build:
+      context: .
+      target: production
+    container_name: job-board-app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-jobboard}
+      JWT_SECRET: ${JWT_SECRET:-your_jwt_secret_key}
+      JWT_EXPIRE: ${JWT_EXPIRE:-1h}
+      COOKIES_SECRET: ${COOKIES_SECRET:-your_cookie_secret}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - job-board-network
+    command: >
+      sh -c "npm run prisma:migrate-deploy && npm run prisma:generate && npm run start:prod"
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: job-board-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@example.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    depends_on:
+      - db
+    networks:
+      - job-board-network
+
+networks:
+  job-board-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

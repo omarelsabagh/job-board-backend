@@ -24,10 +24,12 @@ This is the backend service for a job board application that connects job seeker
 
 - Node.js (v16 or later)
 - npm or yarn
-- PostgreSQL database
 - Git
+- Docker and Docker Compose (for containerized development)
 
 ### Installation
+
+#### Option 1: Local Development (without Docker)
 
 1. **Clone the repository**
    ```bash
@@ -51,11 +53,41 @@ This is the backend service for a job board application that connects job seeker
    # Apply database migrations
    npx prisma migrate dev --name init
    
+   # Generate Prisma client
+   npx prisma generate
+   
    # Seed the database with initial admin user
    npx prisma db seed
    ```
 
+#### Option 2: Docker Development
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/job-board-backend.git
+   cd job-board-backend
+   ```
+
+2. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   Update the `.env` file with your preferred configuration.
+
+3. **Start the application with Docker**
+   ```bash
+   # Build and start the containers
+   npm run docker:build
+   npm run docker:up
+   ```
+   This will start:
+   - PostgreSQL database
+   - NestJS application
+   - pgAdmin (database management tool)
+
 ### Running the application
+
+#### Local Development
 
 ```bash
 # development
@@ -65,6 +97,29 @@ $ npm run start:dev
 $ npm run build
 $ npm run start:prod
 ```
+
+#### Docker Development
+
+```bash
+# Start services
+$ npm run docker:up
+
+# View logs
+$ npm run docker:logs
+
+# Stop services
+$ npm run docker:down
+
+# Rebuild containers (after making changes to Dockerfile)
+$ npm run docker:build
+```
+
+#### Accessing Services
+
+- **Application**: http://localhost:3000
+- **pgAdmin**: http://localhost:5050
+  - Email: admin@example.com (or as set in `.env`)
+  - Password: admin (or as set in `.env`)
 
 ### Testing
 
