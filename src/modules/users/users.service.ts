@@ -1,10 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { User, UserRole } from '@prisma/client';
+import { Prisma, User, UserRole } from '@prisma/client';
 import { RegisterDTO } from './dto/register.dto';
 import { PrismaService } from 'src/database/prisma.service';
 import { comparePassword, hashPassword } from 'src/common/helpers';
 import { AUTH_ERROR_MESSAGES } from 'src/common/helpers';
 import { LoginDTO } from '../auth/dto/login.dto';
+import { PaginatedResponse } from 'src/common/dto';
 
 @Injectable()
 export class UsersService {
@@ -32,6 +33,37 @@ export class UsersService {
     return {
       id: user.id,
       role: user.role,
+    };
+  }
+
+  public async findAllSeekers({
+    page,
+  }: {
+    page: number;
+  }): Promise<PaginatedResponse<User>> {
+    const limit = 10;
+    const filter: Prisma.UserWhereInput = {
+      role: UserRole.JOBSEEKER,
+    };
+
+    const [users, total] = await this.prismaService.$transaction([
+      this.prismaService.user.findMany({
+        where: filter,
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prismaService.user.count({ where: filter }),
+    ]);
+
+    return {
+      data: users,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
     };
   }
 

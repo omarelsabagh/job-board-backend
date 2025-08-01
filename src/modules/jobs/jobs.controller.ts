@@ -50,7 +50,7 @@ export class JobsController {
   async create(
     @CurrentUser() user: UserTokenData,
     @Body() data: CreateJobDTO,
-  ): Promise<Partial<Job>> {
+  ): Promise<Job> {
     return this.jobsService.create({
       data,
       user,

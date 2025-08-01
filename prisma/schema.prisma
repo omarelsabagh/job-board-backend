@@ -23,6 +23,12 @@ enum JobStatus {
   CLOSED
 }
 
+enum ApplicationStatus {
+  SUBMITTED
+  REVIEWED
+  REJECTED
+}
+
 model User {
   id        Int       @id @default(autoincrement())
   role      UserRole
@@ -32,7 +38,10 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
-  jobs Job[]
+  // Relations
+  jobs Job[]  //Jobs posted by this user
+
+  applications Application[] // Applications submitted by this user
 }
 
 model Job {
@@ -44,6 +53,25 @@ model Job {
   status        JobStatus @default(OPEN)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime?  @updatedAt
+ 
+  // Relations
   createdById   Int
   createdByUser User      @relation(fields: [createdById], references: [id])
+
+  applications    Application[] // Applications received for this job
+}
+
+model Application {
+  id           Int                @id @default(autoincrement())
+  resumeText   String
+  coverLetter  String
+  status       ApplicationStatus @default(SUBMITTED)
+  createdAt    DateTime          @default(now())
+
+  // Relations
+  jobId        String
+  job          Job               @relation(fields: [jobId], references: [id])
+
+  userId       Int
+  user         User              @relation(fields: [userId], references: [id])
 }
