@@ -12,7 +12,7 @@ This is the backend service for a job board application that connects job seeker
 - **Backend Framework**: [NestJS](https://nestjs.com/)
 - **Database**: PostgreSQL with [Prisma ORM](https://www.prisma.io/)
 - **Authentication**: JWT with Passport.js
-- **API Documentation**: OpenAPI (Swagger)
+- **API Documentation**: OpenAPI (Swagger) with organized examples
 - **Validation**: class-validator
 - **Security**: Helmet, CORS, CSRF protection
 - **Testing**: Jest
@@ -117,6 +117,7 @@ $ npm run docker:build
 #### Accessing Services
 
 - **Application**: http://localhost:3000
+- **API Documentation (Swagger)**: http://localhost:3000/api
 - **pgAdmin**: http://localhost:5050
   - Email: admin@example.com (or as set in `.env`)
   - Password: admin (or as set in `.env`)
@@ -133,6 +134,85 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
+## 📚 API Documentation
+
+### Swagger UI
+
+The API documentation is automatically generated using Swagger/OpenAPI and is available at:
+
+**http://localhost:3000/api**
+
+### Features
+
+- **Interactive Documentation**: Test API endpoints directly from the browser
+- **Authentication**: Bearer token authentication for protected routes
+- **Request/Response Examples**: Realistic examples for all endpoints
+- **Organized by Tags**: Endpoints are grouped by functionality:
+  - **Authentication**: Login/logout operations
+  - **Users**: User registration and management
+  - **Jobs**: Job CRUD operations
+  - **Applications**: Job application management
+
+### Using the API
+
+1. **Start the application**: `npm run start:dev`
+2. **Open Swagger UI**: Navigate to `http://localhost:3000/api`
+3. **Register a user**: Use the `/users/register` endpoint
+4. **Login**: Use the `/auth/login` endpoint to get authentication
+5. **Explore endpoints**: All endpoints are documented with examples
+
+### Project Structure for Swagger
+
+The Swagger documentation is organized in a clean, maintainable structure:
+
+```
+src/modules/
+├── auth/
+│   ├── swagger/
+│   │   └── auth.swagger.ts          # Authentication examples
+│   ├── auth.controller.ts
+│   └── dto/
+├── users/
+│   ├── swagger/
+│   │   └── users.swagger.ts         # User management examples
+│   ├── users.controller.ts
+│   └── dto/
+├── jobs/
+│   ├── swagger/
+│   │   └── jobs.swagger.ts          # Job CRUD examples
+│   ├── jobs.controller.ts
+│   └── dto/
+└── applications/
+    ├── swagger/
+    │   └── applications.swagger.ts   # Application examples
+    ├── applications.controller.ts
+    └── dto/
+```
+
+### API Endpoints Overview
+
+#### Authentication
+- `POST /auth/login` - User login
+- `POST /auth/logout` - User logout (requires authentication)
+
+#### Users
+- `POST /users/register` - Register new user
+- `GET /users` - Get all users (Admin only)
+
+#### Jobs
+- `GET /jobs` - Get all jobs with optional filters
+- `GET /jobs/:id` - Get specific job
+- `POST /jobs` - Create new job (Admin only)
+- `PATCH /jobs/:id` - Update job (Admin only)
+- `DELETE /jobs/:id` - Delete job (Admin only)
+
+#### Applications
+- `GET /applications/my` - Get user's applications (Job Seeker only)
+- `GET /applications/:id` - Get specific application
+- `POST /applications` - Create job application (Job Seeker only)
+- `GET /applications/job/:jobId` - Get applications for job (Admin only)
+- `PATCH /applications/:id/status` - Update application status (Admin only)
 
 ## 🔧 Assumptions Made
 
@@ -170,13 +250,6 @@ $ npm run test:cov
    - No pagination for large result sets
    - Basic error handling that could be more descriptive
 
-## 📚 API Documentation
-
-API documentation is available via Swagger UI when running in development mode:
-- Access the Swagger UI at: `http://localhost:3000/api` (adjust port if needed)
-- All API endpoints are prefixed with `/api`
-- Authentication is required for protected routes (use the login endpoint to get a JWT token)
-
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
@@ -187,6 +260,15 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+### Adding New API Endpoints
+
+When adding new endpoints, follow the established pattern:
+
+1. **Create Swagger examples** in the module's `swagger/` directory
+2. **Use the examples** in your controller with `@ApiResponse(ModuleSwaggerExamples.exampleName)`
+3. **Keep controllers clean** by moving complex response schemas to swagger files
+4. **Add proper documentation** with `@ApiOperation` and `@ApiTags`
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -195,4 +277,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - [NestJS](https://nestjs.com/) for the amazing framework
 - [Prisma](https://www.prisma.io/) for the database ORM
+- [Swagger](https://swagger.io/) for API documentation
 - All contributors who have helped improve this project

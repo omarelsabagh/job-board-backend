@@ -16,15 +16,26 @@ import { RolesGuard } from 'src/common/guards';
 import { CreateApplicationDTO } from './dto/create-app.dto';
 import { CurrentUser, UserTokenData } from 'src/common/decorators';
 import { UpdateApplicationStatusDTO } from './dto/update-application-status.dto';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
+import { ApplicationsSwaggerExamples } from './swagger/applications.swagger';
 
+@ApiTags('Applications')
 @Controller('applications')
 @UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 export class ApplicationsController {
   constructor(private readonly applicationsService: ApplicationsService) {}
 
   @Roles(UserRole.ADMIN)
   @Get('job/:jobId')
   @UseGuards(RolesGuard)
+  @ApiOperation({ summary: 'Get all applications for a specific job (Admin only)' })
+  @ApiParam({
+    name: 'jobId',
+    description: 'Job ID',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
+  @ApiResponse(ApplicationsSwaggerExamples.applicationList)
   getAllByJob(
     @Param('jobId') jobId: string,
     @CurrentUser() user: UserTokenData,
@@ -33,6 +44,13 @@ export class ApplicationsController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get a specific application by ID' })
+  @ApiParam({
+    name: 'id',
+    description: 'Application ID',
+    example: 1,
+  })
+  @ApiResponse(ApplicationsSwaggerExamples.singleApplication)
   async getApplicationById(
     @Param('id', ParseIntPipe)
     id: number,
@@ -44,6 +62,8 @@ export class ApplicationsController {
   @Roles(UserRole.JOBSEEKER)
   @Get('my')
   @UseGuards(RolesGuard)
+  @ApiOperation({ summary: 'Get all applications for the current user (Job Seeker only)' })
+  @ApiResponse(ApplicationsSwaggerExamples.userApplications)
   getAllByUser(@CurrentUser() user: UserTokenData) {
     return this.applicationsService.findAllByUser(user.sub);
   }
@@ -51,6 +71,8 @@ export class ApplicationsController {
   @Roles(UserRole.JOBSEEKER)
   @Post()
   @UseGuards(RolesGuard)
+  @ApiOperation({ summary: 'Create a new job application (Job Seeker only)' })
+  @ApiResponse(ApplicationsSwaggerExamples.applicationCreated)
   create(
     @Body() data: CreateApplicationDTO,
     @CurrentUser() user: UserTokenData,
@@ -61,6 +83,13 @@ export class ApplicationsController {
   @Roles(UserRole.ADMIN)
   @Patch(':id/status')
   @UseGuards(RolesGuard)
+  @ApiOperation({ summary: 'Update application status (Admin only)' })
+  @ApiParam({
+    name: 'id',
+    description: 'Application ID',
+    example: 1,
+  })
+  @ApiResponse(ApplicationsSwaggerExamples.statusUpdated)
   async updateStatus(
     @Param('id', ParseIntPipe)
     id: number,
