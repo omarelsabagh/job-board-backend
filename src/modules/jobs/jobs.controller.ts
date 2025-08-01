@@ -53,7 +53,7 @@ export class JobsController {
   ): Promise<Partial<Job>> {
     return this.jobsService.create({
       data,
-      userId: user.sub,
+      user,
     });
   }
 

@@ -4,11 +4,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CreateJobDTO } from './dto/create-job.dto';
-import { Job, JobStatus, Prisma } from '@prisma/client';
+import { Job, JobStatus, Prisma, UserRole } from '@prisma/client';
 import { PrismaService } from 'src/database/prisma.service';
 import { UpdateJobDTO } from './dto/update-job.dto';
 import { GENERAL_ERROR_MESSAGES } from 'src/common/helpers';
 import { PaginatedResponse } from 'src/common/dto/paginated-response.dto';
+import { UserTokenData } from 'src/common/decorators/current-user.decorator';
 
 @Injectable()
 export class JobsService {
@@ -68,16 +69,19 @@ export class JobsService {
 
   public async create({
     data,
-    userId,
+    user,
   }: {
     data: CreateJobDTO;
-    userId: number;
+    user: UserTokenData;
   }): Promise<Job> {
+    if (user.role !== UserRole.ADMIN) {
+      throw new ForbiddenException(GENERAL_ERROR_MESSAGES.FORBIDDEN);
+    }
     return this.prismaService.job.create({
       data: {
         ...data,
         updatedAt: null,
-        createdByUser: { connect: { id: userId } },
+        createdByUser: { connect: { id: user.sub } },
       },
     });
   }
