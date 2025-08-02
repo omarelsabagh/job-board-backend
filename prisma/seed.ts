@@ -18,7 +18,7 @@ import { jobs } from './jobs.data';
         create: {
           role: UserRole.ADMIN,
           fullname: 'System Admin',
-          email: 'admin',
+          email: 'admin@admin.com',
           password: hashedPassword,
         },
       });
