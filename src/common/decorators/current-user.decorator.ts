@@ -4,6 +4,7 @@ import { UserRole } from '@prisma/client';
 export interface UserTokenData {
   sub: number;
   role: UserRole;
+  fullname: string;
 }
 
 export const CurrentUser = createParamDecorator(

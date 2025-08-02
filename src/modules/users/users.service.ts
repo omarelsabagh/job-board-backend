@@ -14,7 +14,7 @@ export class UsersService {
   public async findWithCredentials({
     email,
     password,
-  }: LoginDTO): Promise<{ id: number; role: UserRole }> {
+  }: LoginDTO): Promise<{ id: number; role: UserRole; fullname: string }> {
     const user = await this.prismaService.user.findUnique({
       where: { email },
     });
@@ -33,6 +33,7 @@ export class UsersService {
     return {
       id: user.id,
       role: user.role,
+      fullname: user.fullname,
     };
   }
 
