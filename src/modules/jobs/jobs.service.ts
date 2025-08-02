@@ -36,15 +36,16 @@ export class JobsService {
     location,
     status,
     page,
+    user,
   }: {
     location?: string;
     status?: JobStatus;
     page: number;
+    user: UserTokenData;
   }): Promise<PaginatedResponse<Job>> {
-    const limit = 10;
-    const filter: Prisma.JobWhereInput = {
-      status: JobStatus.OPEN,
-    };
+    const limit = 12;
+    const filter: Prisma.JobWhereInput = {};
+    if (user.role === UserRole.ADMIN) filter.createdById = user.sub;
     if (location) filter.location = { contains: location, mode: 'insensitive' };
     if (status) filter.status = status;
 

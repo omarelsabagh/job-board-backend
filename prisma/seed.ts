@@ -7,7 +7,7 @@ import { jobs } from './jobs.data';
   prisma
     .$connect()
     .then(async () => {
-      const hashedPassword = await bcrypt.hash('admin', 10);
+      const hashedPassword = await bcrypt.hash('admin123', 10);
       await prisma.user.upsert({
         where: {
           id: 1,
@@ -19,6 +19,21 @@ import { jobs } from './jobs.data';
           role: UserRole.ADMIN,
           fullname: 'System Admin',
           email: 'admin@admin.com',
+          password: hashedPassword,
+        },
+      });
+
+      await prisma.user.upsert({
+        where: {
+          id: 2,
+        },
+        update: {
+          password: hashedPassword,
+        },
+        create: {
+          role: UserRole.ADMIN,
+          fullname: 'System Admin 2',
+          email: 'admin2@admin.com',
           password: hashedPassword,
         },
       });

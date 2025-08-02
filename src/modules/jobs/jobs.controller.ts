@@ -77,11 +77,17 @@ export class JobsController {
   })
   @ApiResponse(JobsSwaggerExamples.jobList)
   findAll(
+    @CurrentUser() user: UserTokenData,
     @Query('location') location?: string,
     @Query('status') status?: JobStatus,
     @Query('page', ParseIntPipe) page = 1,
   ): Promise<PaginatedResponse<Job>> {
-    return this.jobsService.findAll({ location, status, page });
+    return this.jobsService.findAll({
+      location,
+      status,
+      page,
+      user,
+    });
   }
 
   @Roles(UserRole.ADMIN)
