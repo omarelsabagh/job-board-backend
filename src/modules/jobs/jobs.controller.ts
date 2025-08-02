@@ -24,7 +24,14 @@ import {
 } from 'src/common/decorators/current-user.decorator';
 import { UpdateJobDTO } from './dto/update-job.dto';
 import { PaginatedResponse } from 'src/common/dto/paginated-response.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery, ApiParam } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiQuery,
+  ApiParam,
+} from '@nestjs/swagger';
 import { JobsSwaggerExamples } from './swagger/jobs.swagger';
 
 @ApiTags('Jobs')

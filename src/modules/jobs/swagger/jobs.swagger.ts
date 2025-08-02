@@ -1,5 +1,3 @@
-import { JobStatus } from '@prisma/client';
-
 export const JobsSwaggerExamples = {
   singleJob: {
     status: 200,
@@ -9,7 +7,10 @@ export const JobsSwaggerExamples = {
       properties: {
         id: { type: 'string', example: '1' },
         title: { type: 'string', example: 'Software Engineer' },
-        description: { type: 'string', example: 'We are looking for a skilled software engineer...' },
+        description: {
+          type: 'string',
+          example: 'We are looking for a skilled software engineer...',
+        },
         location: { type: 'string', example: 'New York, NY' },
         salary: { type: 'number', example: 80000 },
         status: { type: 'string', example: 'OPEN' },
@@ -17,7 +18,7 @@ export const JobsSwaggerExamples = {
       },
     },
   },
-  
+
   jobList: {
     status: 200,
     description: 'Jobs retrieved successfully',
@@ -31,11 +32,17 @@ export const JobsSwaggerExamples = {
             properties: {
               id: { type: 'string', example: '1' },
               title: { type: 'string', example: 'Software Engineer' },
-              description: { type: 'string', example: 'We are looking for a skilled software engineer...' },
+              description: {
+                type: 'string',
+                example: 'We are looking for a skilled software engineer...',
+              },
               location: { type: 'string', example: 'New York, NY' },
               salary: { type: 'number', example: 80000 },
               status: { type: 'string', example: 'OPEN' },
-              createdAt: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+              createdAt: {
+                type: 'string',
+                example: '2024-01-01T00:00:00.000Z',
+              },
             },
           },
         },
@@ -45,7 +52,7 @@ export const JobsSwaggerExamples = {
       },
     },
   },
-  
+
   jobCreated: {
     status: 201,
     description: 'Job created successfully',
@@ -54,7 +61,10 @@ export const JobsSwaggerExamples = {
       properties: {
         id: { type: 'string', example: '1' },
         title: { type: 'string', example: 'Software Engineer' },
-        description: { type: 'string', example: 'We are looking for a skilled software engineer...' },
+        description: {
+          type: 'string',
+          example: 'We are looking for a skilled software engineer...',
+        },
         location: { type: 'string', example: 'New York, NY' },
         salary: { type: 'number', example: 80000 },
         status: { type: 'string', example: 'OPEN' },
@@ -62,7 +72,7 @@ export const JobsSwaggerExamples = {
       },
     },
   },
-  
+
   jobUpdated: {
     status: 200,
     description: 'Job updated successfully',
@@ -78,9 +88,9 @@ export const JobsSwaggerExamples = {
       },
     },
   },
-  
+
   jobDeleted: {
     status: 200,
     description: 'Job deleted successfully',
   },
-}; 
+};

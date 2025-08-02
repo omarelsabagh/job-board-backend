@@ -42,7 +42,9 @@ export class JobsService {
     page: number;
   }): Promise<PaginatedResponse<Job>> {
     const limit = 10;
-    const filter: Prisma.JobWhereInput = {};
+    const filter: Prisma.JobWhereInput = {
+      status: JobStatus.OPEN,
+    };
     if (location) filter.location = { contains: location, mode: 'insensitive' };
     if (status) filter.status = status;
 

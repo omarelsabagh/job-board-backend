@@ -11,7 +11,8 @@ export class CreateApplicationDTO {
 
   @ApiProperty({
     description: 'Resume text content',
-    example: 'Experienced software engineer with 5+ years in web development...',
+    example:
+      'Experienced software engineer with 5+ years in web development...',
   })
   @IsString()
   resumeText: string;

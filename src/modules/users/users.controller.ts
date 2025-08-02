@@ -15,7 +15,13 @@ import { RegisterDTO } from './dto/register.dto';
 import { PaginatedResponse } from 'src/common/dto';
 import { Roles } from 'src/common/decorators';
 import { JwtAuthGuard, RolesGuard } from 'src/common/guards';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiQuery,
+} from '@nestjs/swagger';
 import { UsersSwaggerExamples } from './swagger/users.swagger';
 
 @ApiTags('Users')

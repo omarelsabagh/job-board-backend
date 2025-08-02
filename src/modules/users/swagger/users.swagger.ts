@@ -14,7 +14,10 @@ export const UsersSwaggerExamples = {
               fullname: { type: 'string', example: 'John Doe' },
               email: { type: 'string', example: 'john@example.com' },
               role: { type: 'string', example: 'SEEKER' },
-              createdAt: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+              createdAt: {
+                type: 'string',
+                example: '2024-01-01T00:00:00.000Z',
+              },
             },
           },
         },
@@ -24,7 +27,7 @@ export const UsersSwaggerExamples = {
       },
     },
   },
-  
+
   userCreated: {
     status: 200,
     description: 'User registered successfully',
@@ -39,9 +42,9 @@ export const UsersSwaggerExamples = {
       },
     },
   },
-  
+
   validationError: {
     status: 400,
     description: 'Bad request - validation error',
   },
-}; 
+};

@@ -16,7 +16,13 @@ import { RolesGuard } from 'src/common/guards';
 import { CreateApplicationDTO } from './dto/create-app.dto';
 import { CurrentUser, UserTokenData } from 'src/common/decorators';
 import { UpdateApplicationStatusDTO } from './dto/update-application-status.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiParam,
+} from '@nestjs/swagger';
 import { ApplicationsSwaggerExamples } from './swagger/applications.swagger';
 
 @ApiTags('Applications')
@@ -29,7 +35,9 @@ export class ApplicationsController {
   @Roles(UserRole.ADMIN)
   @Get('job/:jobId')
   @UseGuards(RolesGuard)
-  @ApiOperation({ summary: 'Get all applications for a specific job (Admin only)' })
+  @ApiOperation({
+    summary: 'Get all applications for a specific job (Admin only)',
+  })
   @ApiParam({
     name: 'jobId',
     description: 'Job ID',
@@ -62,7 +70,9 @@ export class ApplicationsController {
   @Roles(UserRole.JOBSEEKER)
   @Get('my')
   @UseGuards(RolesGuard)
-  @ApiOperation({ summary: 'Get all applications for the current user (Job Seeker only)' })
+  @ApiOperation({
+    summary: 'Get all applications for the current user (Job Seeker only)',
+  })
   @ApiResponse(ApplicationsSwaggerExamples.userApplications)
   getAllByUser(@CurrentUser() user: UserTokenData) {
     return this.applicationsService.findAllByUser(user.sub);
