@@ -1,5 +1,6 @@
 import { PrismaClient, UserRole } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { jobs } from './jobs.data';
 
 (() => {
   const prisma = new PrismaClient();
@@ -21,6 +22,8 @@ import * as bcrypt from 'bcrypt';
           password: hashedPassword,
         },
       });
+
+      await prisma.job.createMany({ data: jobs });
 
       await prisma.$disconnect();
     })
